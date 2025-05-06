@@ -24,6 +24,15 @@ app.get('/student', async(req, res)=>{
     }
 });
 
+app.get('/allData', async(req, res)=>{
+    try{
+        const result = await pool.query('SELECT count(employee_id) FROM employees');
+        res.json(result.rows);
+    }catch(err){
+        res.status(500).json({Error: err.message});
+    }
+});
+
 app.get('/gettotalstd', async(req, res)=>{
     try{
         const result = await pool.query('SELECT COUNT(ID) FROM student');
@@ -196,6 +205,24 @@ app.get('/employeesWithJobDeptManager', async(req, res)=>{
             ORDER BY e.last_name, e.first_name
         `);
         res.json(result.rows);
+    }catch(err){
+        res.status(500).json({Error: err.message});
+    }
+});
+
+// All Jobs
+app.get('/allData', async(req, res)=>{
+    try{
+        const result = await pool.query(`
+            SELECT * FROM jobs
+        `);
+        const result2 = await pool.query(`
+            SELECT * FROM regions
+        `);
+        const result3 = await pool.query(`
+            SELECT * FROM regions
+        `);
+        res.json({result : result.rows, result2 : result2.rows });
     }catch(err){
         res.status(500).json({Error: err.message});
     }
